@@ -1,0 +1,52 @@
+{
+	"name": "PhD Standard LaTeX Env",
+	// 使用 bullseye，或者使用更新的 bookworm (Debian 12)
+	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
+	"customizations": {
+		"vscode": {
+			"settings": {
+				"latex-workshop.latex.tools": [
+					{
+						"name": "xelatex",
+						"command": "xelatex",
+						"args": [
+							"-synctex=1",
+							"-interaction=nonstopmode",
+							"-file-line-error",
+							"%DOC%"
+						]
+					},
+					{
+						"name": "bibtex",
+						"command": "bibtex",
+						"args": [
+							"%DOCFILE%"
+						]
+					}
+				],
+				"latex-workshop.latex.recipes": [
+					{
+						"name": "xelatex 完整编译",
+						"tools": [
+							"xelatex",
+							"bibtex",
+							"xelatex",
+							"xelatex"
+						]
+					}
+				],
+				"latex-workshop.latex.autoBuild.run": "onFileChange",
+				"latex-workshop.latex.outDir": "%DIR%/build"
+			},
+			"extensions": [
+				"James-Yu.latex-workshop",
+				"GitHub.copilot",
+				"mhutchie.git-graph",
+				"valentjn.vscode-ltex"
+			]
+		}
+	},
+	// 保持原有的安装命令不变
+	"postCreateCommand": "sudo apt-get update && sudo apt-get install -y texlive-xetex texlive-lang-chinese texlive-science texlive-publishers texlive-bibtex-extra texlive-pictures texlive-latex-extra texlive-fonts-recommended latexmk git openssh-client libfontconfig1 && sudo mkdir -p /usr/local/share/fonts/custom && sudo cp -r fonts/* /usr/local/share/fonts/custom/ && fc-cache -fv",
+	"remoteUser": "vscode"
+}

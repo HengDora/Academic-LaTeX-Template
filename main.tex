@@ -1,0 +1,111 @@
+\documentclass[a4paper, 12pt]{article}
+
+% --- 1. 基础包引入 ---
+\usepackage[top=2.5cm, bottom=2.5cm, left=3cm, right=3cm]{geometry}
+\usepackage{amsmath, amssymb}
+\usepackage{graphicx}
+\usepackage{hyperref}
+\usepackage{xcolor}
+
+% --- 字体配置 ---
+\usepackage{fontspec}
+\usepackage{xeCJK}
+
+% === 1. 英文字体 (Times New Roman) ===
+\setmainfont{Times New Roman}[
+    Path = fonts/,
+    Extension = .ttf,
+    UprightFont = times,
+    BoldFont = timesbd,
+    ItalicFont = timesi,
+    BoldItalicFont = timesbi
+]
+
+% === 2. 中文字体 ===
+\setCJKmainfont{SimSun}[
+    Path = fonts/,
+    Extension = .ttc,        % 统一使用 ttc 后缀
+    UprightFont = simsun,    % 正文读取 simsun.ttc (这是好的)
+    BoldFont = simsun,       % 【关键】粗体也指向 simsun.ttc
+    ItalicFont = simsun,     % 斜体也指向 simsun.ttc
+    BoldItalicFont = simsun, % 粗斜体也指向 simsun.ttc
+    AutoFakeBold = 2.5       % 【魔法】开启自动加粗！数值越大越黑
+]
+
+% === 3. 黑体 (用于无衬线字体) ===
+\setCJKsansfont{SimHei}[
+    Path = fonts/,
+    Extension = .ttf,
+    UprightFont = simhei,
+    AutoFakeBold = true
+]
+% --- 3. 自动生成参考文献数据 ---
+\usepackage{filecontents}
+\begin{filecontents}{references.bib}
+@article{einstein,
+    author = {Albert Einstein},
+    title = {Zur Elektrodynamik bewegter Körper},
+    journal = {Annalen der Physik},
+    volume = {322},
+    number = {10},
+    pages = {891--921},
+    year = {1905},
+    publisher = {Wiley-VCH}
+}
+@book{knuth,
+    author = {Donald E. Knuth},
+    title = {The TeXbook},
+    publisher = {Addison-Wesley},
+    year = {1984}
+}
+\end{filecontents}
+
+% --- 4. 参考文献设置 ---
+\bibliographystyle{plain}
+
+% --- 正文开始 ---
+\title{\bfseries LaTeX 环境与字体加载测试报告}
+\author{GitHub Codespaces User}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\section{环境综述 (Environment)}
+如果你看到了这份文档，且标题没有乱码，说明\textbf{本地字体路径} 配置正确。
+\begin{itemize}
+    \item 操作系统: Debian (Codespaces)
+    \item 编译器: XeLaTeX
+    \item 字体加载方式: \texttt{Project Local (fonts/)}
+\end{itemize}
+
+\section{字体测试 (Font Test)}
+
+\subsection{中文字体测试}
+\begin{itemize}
+    \item \textbf{宋体测试 (SimSun)}: 这是标准宋体。这里应该是中文宋体显示。
+    \item \textbf{粗宋体测试 (SimSun-Bold)}: \textbf{这是粗体宋体。使用了 AutoFakeBold 实现自动加粗，无需额外的粗体文件。}
+    \item \textsf{黑体测试 (SimHei)}: \textsf{这是黑体，读取的是 fonts/simhei.ttf。}
+\end{itemize}
+
+\subsection{English Font Test (Times New Roman)}
+This section tests the specific font files in your \texttt{fonts/} folder.
+\begin{itemize}
+    \item Regular: The quick brown fox jumps over the lazy dog.
+    \item \textbf{Bold: The quick brown fox jumps over the lazy dog.}
+    \item \textit{Italic: The quick brown fox jumps over the lazy dog.}
+    \item \textbf{\textit{Bold Italic: The quick brown fox jumps over the lazy dog.}}
+\end{itemize}
+
+\section{数学公式测试 (Math Test)}
+\begin{equation}
+    E = mc^2 \quad \text{and} \quad \int_{-\infty}^{\infty} e^{-x^2} dx = \sqrt{\pi}
+\end{equation}
+
+\section{参考文献测试}
+引用测试：\cite{einstein} 和 \cite{knuth}。
+
+\bibliography{references}
+
+\end{document}
