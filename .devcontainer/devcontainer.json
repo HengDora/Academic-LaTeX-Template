@@ -1,52 +1,69 @@
 {
-	"name": "PhD Standard LaTeX Env",
-	// 使用 bullseye，或者使用更新的 bookworm (Debian 12)
-	"image": "mcr.microsoft.com/devcontainers/base:bookworm",
-	"customizations": {
-		"vscode": {
-			"settings": {
-				"latex-workshop.latex.tools": [
-					{
-						"name": "xelatex",
-						"command": "xelatex",
-						"args": [
-							"-synctex=1",
-							"-interaction=nonstopmode",
-							"-file-line-error",
-							"%DOC%"
-						]
-					},
-					{
-						"name": "bibtex",
-						"command": "bibtex",
-						"args": [
-							"%DOCFILE%"
-						]
-					}
-				],
-				"latex-workshop.latex.recipes": [
-					{
-						"name": "xelatex 完整编译",
-						"tools": [
-							"xelatex",
-							"bibtex",
-							"xelatex",
-							"xelatex"
-						]
-					}
-				],
-				"latex-workshop.latex.autoBuild.run": "onFileChange",
-				"latex-workshop.latex.outDir": "%DIR%/build"
-			},
-			"extensions": [
-				"James-Yu.latex-workshop",
-				"GitHub.copilot",
-				"mhutchie.git-graph",
-				"valentjn.vscode-ltex"
-			]
-		}
-	},
-	// 保持原有的安装命令不变
-	"postCreateCommand": "sudo apt-get update && sudo apt-get install -y texlive-xetex texlive-lang-chinese texlive-science texlive-publishers texlive-bibtex-extra texlive-pictures texlive-latex-extra texlive-fonts-recommended latexmk git openssh-client libfontconfig1 && sudo mkdir -p /usr/local/share/fonts/custom && sudo cp -r fonts/* /usr/local/share/fonts/custom/ && fc-cache -fv",
-	"remoteUser": "vscode"
+    "name": "Academic Standard LaTeX Env",
+    "image": "mcr.microsoft.com/devcontainers/base:bookworm",
+    "customizations": {
+        "vscode": {
+            "settings": {
+                // 1. PDF 生成在这个位置
+                "latex-workshop.latex.outDir": "%DIR%/build",
+                
+                // 2. 定义工具链
+                "latex-workshop.latex.tools": [
+                    {
+                        "name": "xelatex",
+                        "command": "xelatex",
+                        "args": [
+                            "-synctex=1",
+                            "-interaction=nonstopmode",
+                            "-file-line-error",
+                            "-output-directory=build", // 将所有输出扔进 build
+                            "%DOC%"
+                        ]
+                    },
+                    {
+                        "name": "bibtex",
+                        "command": "bibtex",
+                        "args": [
+                            "build/%DOCFILE%"          // 去 build 目录找 .aux 文件
+                        ]
+                    },
+                    {
+                        "name": "copy-pdf",            // 把 PDF 拷出来
+                        "command": "cp",
+                        "args": [
+                            "build/%DOCFILE%.pdf",     // 源文件
+                            "%DIR%/"                   // 目标位置（根目录）
+                        ]
+                    }
+                ],
+                
+                // 3. 定义编译流程
+                "latex-workshop.latex.recipes": [
+                    {
+                        "name": "xelatex 完整编译",
+                        "tools": [
+                            "xelatex",
+                            "bibtex",
+                            "xelatex",
+                            "xelatex",
+                            "copy-pdf"                 // 执行复制
+                        ]
+                    }
+                ],
+                
+                // 4. 其他设置
+                "latex-workshop.latex.autoBuild.run": "onFileChange",
+                "latex-workshop.view.pdf.internal.synctex.keybinding": "double-click"
+            },
+            "extensions": [
+                "James-Yu.latex-workshop",
+                "GitHub.copilot",
+                "mhutchie.git-graph",
+                "valentjn.vscode-ltex"
+            ]
+        }
+    },
+    // 5. 安装命令：末尾增加了 && mkdir -p build 以确保目录存在
+    "postCreateCommand": "sudo apt-get update && sudo apt-get install -y texlive-xetex texlive-lang-chinese texlive-science texlive-publishers texlive-bibtex-extra texlive-pictures texlive-latex-extra texlive-fonts-recommended latexmk git openssh-client libfontconfig1 && sudo mkdir -p /usr/local/share/fonts/custom && sudo cp -r fonts/* /usr/local/share/fonts/custom/ && fc-cache -fv && mkdir -p build",
+    "remoteUser": "vscode"
 }
