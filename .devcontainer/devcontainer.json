@@ -4,6 +4,16 @@
     "customizations": {
         "vscode": {
             "settings": {
+                // 针对 LaTeX 文件开启自动换行
+                "[latex]": {
+                    "editor.wordWrap": "on",            // 开启换行
+                    "editor.wordWrapColumn": 80,        // (可选) 如果选 wordWrap: wordWrapColumn，则在此处折行
+                    "editor.lineHeight": 24             // (可选) 稍微增加行高，提升阅读体验
+                },
+                // 针对纯 TeX 文件开启自动换行
+                "[tex]": {
+                    "editor.wordWrap": "on"
+                },
                 // 1. PDF 生成在这个位置
                 "latex-workshop.latex.outDir": "%DIR%/build",
                 
